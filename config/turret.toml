@@ -64,9 +64,9 @@ muzzle_forward_mm = 100     # TEMP: barrel exit distance in front of the tilt ax
 layout = "single_wheel"     # TEMP: "single_wheel" (one wheel + backstop) or "dual_wheel"
 wheel_diameter_mm = 40.0    # TEMP
 slip = 0.8                  # TEMP: real exit speed / no-slip exit speed; measured in step 5
-velocity_cap_mps = 13.0     # TEMP: you said ~20; 13.3 m/s is the toy-standard limit for a hard 0.9 g projectile (docs/FLAGS.md #1). Firmware holds the real cap
-motor_kv = 650              # TEMP: real KV = no-load RPM / volts; with full battery voltage it sets the hard top speed
-motor = "~650KV outrunner, 2212/2216 class"  # TEMP: low KV so full throttle physically can't pass the cap (docs/DESIGN.md)
+velocity_cap_mps = 20.0     # TEMP: your choice (2026-10-27), Z87+ glasses required (docs/FLAGS.md #1). Verify on the chronograph; firmware holds the real cap
+motor_kv = 1000             # TEMP: real KV = no-load RPM / volts; with full battery voltage it sets the hard top speed
+motor = "~1000KV outrunner, 2212/2216 class"  # TEMP: KV picked so full throttle physically can't pass the cap (docs/DESIGN.md)
 esc = "AM32 or Bluejay 35A, bidirectional DShot"  # TEMP
 
 [projectile]

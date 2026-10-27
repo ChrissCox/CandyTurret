@@ -3,7 +3,7 @@
 An M&M launcher turret that mounts on a power wheelchair. A RealSense D435 finds people who have opted in, the turret aims at their torso, and Chris presses a switch to fire one candy at a time.
 
 **Before anything fires, read [docs/FLAGS.md](docs/FLAGS.md):**
-- the speed cap starts at 13 m/s;
+- the speed cap starts at 20 m/s, so Z87+ glasses are required, not optional;
 - everyone in range wears Z87+ glasses;
 - the kill switch cuts ESC power in hardware;
 - the barrel can't point at the rider.

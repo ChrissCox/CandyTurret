@@ -10,14 +10,14 @@ Research-backed items were checked on 2026-10-26 (see DESIGN.md).
 
 ## STOP
 
-1. **Start the speed cap at 13 m/s, not 20.**
+1. **The speed cap starts at 20 m/s (Chris's call, 2026-10-27), which is above toy-safety levels.**
    - An M&M is a hard projectile; a Nerf dart is foam.
    - The toy safety standards (ASTM F963, EN 71-1, ISO 8124-1) only allow a projectile above 0.08 J if it has a soft, resilient tip. For a 0.86-0.9 g rigid candy, 0.08 J works out to **13.3-13.6 m/s**.
-   - At 20 m/s it carries about 0.17 J, which is 2.2× that limit.
-   - Eye-injury research puts a 50% chance of a scratched cornea at about 1,500 J/m². An edge-on M&M reaches that at **~15.6 m/s**.
-   - The config now says 13 (TEMP). Raise it only on purpose, after the chronograph test.
-2. **Everyone in range wears Z87+ safety glasses.** Torso-only aim can't be perfect:
-   - people duck during the 0.12-0.33 s flight;
+   - At 20 m/s it carries about 0.15-0.17 J, roughly 2× that limit.
+   - Eye-injury research puts a 50% chance of a scratched cornea at about 1,500 J/m². An edge-on M&M reaches that at **~15.6 m/s**. At 20 m/s it's about 1.6× that level, so an eye hit without glasses is likely to injure.
+   - Chris chose 20 knowing these numbers, on the condition that everyone wears Z87+ glasses (#2). Verify the real speed on the chronograph before anyone stands downrange.
+2. **Everyone in range wears Z87+ safety glasses. At 20 m/s this is a requirement, not a nice-to-have.** Torso-only aim can't be perfect:
+   - people duck during the 0.08-0.22 s flight;
    - the detector misses keypoints;
    - candies ricochet off walls.
 

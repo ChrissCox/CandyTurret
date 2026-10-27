@@ -114,7 +114,7 @@ The D435 has no IMU, and the camera can't tell the chair turning from everyone e
 2. remove the chair's rotation from track velocities, so the Kalman filter runs in a level, non-rotating frame;
 3. use measured gravity as "down" in the ballistics.
 
-Driving straight needs no IMU. Tracking measures velocity relative to the chair, which is what the lead needs. The headwind from a 1 m/s chair is too small to matter at 10-13 m/s.
+Driving straight needs no IMU. Tracking measures velocity relative to the chair, which is what the lead needs. The headwind from a 1 m/s chair is too small to matter at 15-20 m/s.
 
 ### 6. Leading moving targets
 
@@ -135,11 +135,11 @@ Run `python -m candyturret ballistics`:
 
 | Exit speed | Range | Tilt above level | Flight time | Impact speed |
 |---|---|---|---|---|
-| 13 m/s | 1.5 m | 2.6° | 0.12 s | 12.3 m/s |
+| 20 m/s | 1.5 m | 1.1° | 0.08 s | 19.0 m/s |
+| 20 m/s | 3 m | 2.3° | 0.16 s | 18.0 m/s |
+| 20 m/s | 4 m | 3.1° | 0.22 s | 17.4 m/s |
 | 13 m/s | 3 m | 5.4° | 0.25 s | 11.7 m/s |
 | 13 m/s | 4 m | 7.4° | 0.33 s | 11.3 m/s |
-| 10 m/s | 3 m | 9.2° | 0.32 s | 9.0 m/s |
-| 10 m/s | 4 m | 12.8° | 0.44 s | 8.7 m/s |
 
 Drag takes only 10-15% of the speed at these ranges. **For safety, impact speed is effectively the exit speed.**
 
@@ -165,23 +165,24 @@ A single NO_DIP latches a FEED fault (empty hopper or stuck candy), because the 
 
 ## Launcher
 
-- **Layout: one wheel against a backstop.** Feed each M&M **flat**, with the wheel's axle **parallel to the candy's short axis**. The candy rolls along the backstop and leaves spinning about its own axis like a tiny frisbee, at about 19,000 rpm at 13 m/s (research). That spin holds it flat and stable. Two matched counter-spinning wheels give no spin, so a flat candy tumbles and spreads its shots.
+- **Layout: one wheel against a backstop.** Feed each M&M **flat**, with the wheel's axle **parallel to the candy's short axis**. The candy rolls along the backstop and leaves spinning about its own axis like a tiny frisbee, at about 19,000 rpm at 13 m/s and about 28,000 rpm at 20 m/s (research). That spin holds it flat and stable. Two matched counter-spinning wheels give no spin, so a flat candy tumbles and spreads its shots.
 - **The cost of one wheel:** a single wheel with a backstop sends the candy out at **half the rim speed**, so it needs twice the RPM (code: `ballistics.contact_factor`). Real launchers also lose another 20-30% to slip. Measure that with a chronograph; never assume it.
 - **Feed channel:** about 8-10 mm tall, between the candy's thickness and its width. That forces every M&M to lie flat. Add a slow agitator in the funnel, because round candies arch and jam over a narrow outlet.
 - **Wheel:** soft urethane or foam tire, very little squeeze. Bench-test for cracked shells, since fragments are hard and can be sharp. Fully guard the wheel.
 - **Speed drop per shot:** about 2-3% of RPM (research). The RPM sensor needs fine resolution, so log a 1 kHz trace in step 6 to set `DIP_FRACTION`.
 - **Make the speed cap physical.** Pick the motor KV, battery and wheel so 100% throttle on a full battery can't pass the cap even with zero slip. The table below includes a 10% margin, because a "700 KV" motor can really be 740.
 
-  For a 13 m/s cap with one wheel:
+  For a 20 m/s cap with one wheel:
 
   | Wheel | Max no-load RPM | Max KV on 3S (12.6 V) | Max KV on 4S (16.8 V) |
   |---|---|---|---|
-  | 30 mm | 15,050 | 1,190 | 895 |
-  | 40 mm | 11,280 | 895 | 670 |
-  | 50 mm | 9,030 | 715 | 535 |
+  | 30 mm | 23,150 | 1,840 | 1,380 |
+  | 40 mm | 17,360 | 1,380 | 1,030 |
+  | 50 mm | 13,890 | 1,100 | 825 |
 
   - For two wheels, halve the KV numbers.
-  - The TEMP config uses a 40 mm wheel with a ~650 KV motor on 4S. That tops out at 11.4 m/s with zero slip, so about 9 m/s in practice.
+  - The TEMP config uses a 40 mm wheel with a ~1000 KV motor on 4S. That tops out at 17.6 m/s with zero slip, so about 14 m/s in practice, because slip costs 20-30%.
+  - To actually reach 20 m/s you'd need a faster motor. Then the hardware could pass the cap at zero slip, and only the firmware would hold it. Decide that after the step 5 chronograph test, not before.
   - **Measure the real KV**: no-load RPM ÷ volts.
   - `python -m candyturret ballistics` prints this check, plus the cap-safe `RPM_CAP` (the cap at zero slip) to use until the chronograph result exists.
   - The firmware RPM cap then trims to the chronograph result as a second layer.

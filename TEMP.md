@@ -17,7 +17,7 @@ Run it from `host/`. When you replace a value, delete its `TEMP` tag, and strike
 | Tilt range | −10 … +30° | measure the hard stops |
 | Launcher layout | one wheel + backstop, candy fed flat | DESIGN.md → Launcher |
 | Wheel diameter | 40 mm | what you print or buy |
-| Flywheel motor | ~650 KV, 2212/2216 class (`launcher.motor_kv`) | pick from the KV table in DESIGN.md; measure the real KV (no-load RPM ÷ volts) |
+| Flywheel motor | ~1000 KV, 2212/2216 class (`launcher.motor_kv`) | pick from the KV table in DESIGN.md; measure the real KV (no-load RPM ÷ volts) |
 | ESC | AM32 or Bluejay 35 A, bidirectional DShot | |
 | Feeder | servo indexer + home switch | |
 | ESP32-S3 board | unknown | note whether it's native USB or a UART bridge (affects PROTOCOL.md transport) |
@@ -40,7 +40,7 @@ Run it from `host/`. When you replace a value, delete its `TEMP` tag, and strike
 | M&M mass (`projectile.mass_g`) | 0.86 g (published average) | weigh 20, divide by 20 | 5 |
 | M&M size (`projectile.diameter_mm`, `thickness_mm`) | 13.4 × 6.9 mm (published) | calipers on 10 | 5 |
 | Slip (`launcher.slip`) | 0.8 | chronograph speed ÷ ideal speed from RPM | 5 |
-| Speed cap (`launcher.velocity_cap_mps`) | **13 m/s** (you said ~20; see FLAGS #1) | your decision, then verified on the chronograph | 5 |
+| Speed cap (`launcher.velocity_cap_mps`) | **20 m/s** (your call 2026-10-27; Z87+ glasses required, FLAGS #1) | verify on the chronograph | 5 |
 | Drag (`projectile.drag_coefficient`) | 0.7 | replaced by the calibration table | 7 |
 | Aim point height on the torso (`aim.aim_fraction`) | 0.55 | look at step 2 on a few body types | 2 |
 | Head clearance (`aim.head_clearance_m`) | 30 cm | set to measured shot spread at max range + 10 cm head radius | 7 |
@@ -52,7 +52,7 @@ Run it from `host/`. When you replace a value, delete its `TEMP` tag, and strike
 
 | What | Placeholder | How | Step |
 |---|---|---|---|
-| `RPM_CAP` | ~12,400 (the cap at zero slip, from `python -m candyturret ballistics`) | RPM that gives the speed cap on a new, clean wheel and a full battery | 5 |
+| `RPM_CAP` | ~19,100 (the cap at zero slip, from `python -m candyturret ballistics`) | RPM that gives the speed cap on a new, clean wheel and a full battery | 5 |
 | `THROTTLE_MAX` | — | throttle that reaches `RPM_CAP` (not more) on a full battery | 5 |
 | Throttle → RPM table | — | for the sensor plausibility check (R1) | 5 |
 | `DIP_FRACTION` | 1.5% | RPM trace at 1 kHz during 20 test shots | 6 |
