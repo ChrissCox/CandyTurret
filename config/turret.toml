@@ -1,0 +1,92 @@
+# CandyTurret settings, shared by every host program.
+#
+# Anything marked "# TEMP" is a made-up placeholder until we measure or decide it.
+# List them all with:   python -m candyturret temp      (run from host/)
+# TEMP.md says how to pin each one down.
+#
+# Frames: camera = RealSense (x right, y down, z forward).
+#         turret base = at the pan pivot, fixed to the chair (x forward, y left, z up).
+
+[camera]
+width = 848                 # 848x480 is the D435's most accurate depth mode
+height = 480
+fps = 30
+min_depth_m = 0.3           # D435 readings outside [min, max] are rejected
+max_depth_m = 6.0           # TEMP: error grows with distance squared; confirm with the tape-measure test
+# Where the camera sits relative to the pan pivot, mm (turret base frame)
+offset_forward_mm = 60      # TEMP
+offset_up_mm = 80           # TEMP
+offset_left_mm = 0          # TEMP
+# Which way the camera points relative to pan=0, tilt=0, degrees
+pitch_deg = 0.0             # TEMP: + looks up
+yaw_deg = 0.0               # TEMP: + looks left
+roll_deg = 0.0              # TEMP
+
+[detector]
+model = "yolo11n-pose.pt"   # small YOLO pose model: person boxes + 17 keypoints in one pass
+imgsz = 640
+conf = 0.4
+device = "auto"             # "auto", "cpu" or "cuda:0"
+tracker = "bytetrack.yaml"
+
+[aim]
+keypoint_min_conf = 0.5     # YOLO zeroes keypoints under 0.5, so lower values act like 0.5
+aim_fraction = 0.55         # TEMP: 0 = shoulder line, 1 = hip line; 0.5-0.6 is chest/belly
+torso_shrink = 0.6          # depth comes from the middle 60% of the torso, away from arms and background
+min_valid_depth_fraction = 0.3
+head_clearance_m = 0.30     # TEMP: hold fire if a head/face keypoint is closer than this to the aim point
+require_head_visible = true # hold fire when no head keypoint is seen (head out of frame, turned away)
+blocked_margin_m = 0.3      # anything this much nearer than the torso, inside the no-head zone...
+blocked_fraction = 0.1      # ...covering more than this share of it = hold ("something in front")
+min_fire_range_m = 1.5      # TEMP: your starting value; the firmware enforces its own copy
+max_fire_range_m = 4.0      # TEMP: set from the calibration shots in step 7
+
+[tracking]
+lock_timeout_s = 0.7        # keep the locked target this long after it drops out
+require_opt_in = true       # only people who did the opt-in gesture can be targeted
+opt_in_hold_s = 1.0         # both hands above the head this long = "I'm in"
+forget_s = 2.0              # a track unseen this long is deleted
+opt_in_gap_s = 0.25         # unseen longer than this = opt-in lost (the id may now be someone else)
+max_jump_m = 0.8            # a track that jumps further than this between frames loses its opt-in (likely ID swap)
+accel_noise = 3.0           # Kalman process noise, m/s^2
+
+[turret]
+pan_min_deg = -40.0         # TEMP: no point panning past the color camera's ~69 deg view
+pan_max_deg = 40.0          # TEMP
+tilt_min_deg = -10.0        # TEMP
+tilt_max_deg = 30.0         # TEMP
+pan_drive = "servo"         # TEMP: "servo" or "stepper"
+tilt_drive = "servo"        # TEMP
+tilt_axis_up_mm = 40        # TEMP: tilt axis height above the pan pivot
+muzzle_forward_mm = 100     # TEMP: barrel exit distance in front of the tilt axis
+
+[launcher]
+layout = "single_wheel"     # TEMP: "single_wheel" (one wheel + backstop) or "dual_wheel"
+wheel_diameter_mm = 40.0    # TEMP
+slip = 0.8                  # TEMP: real exit speed / no-slip exit speed; measured in step 5
+velocity_cap_mps = 13.0     # TEMP: you said ~20; 13.3 m/s is the toy-standard limit for a hard 0.9 g projectile (docs/FLAGS.md #1). Firmware holds the real cap
+motor_kv = 650              # TEMP: real KV = no-load RPM / volts; with full battery voltage it sets the hard top speed
+motor = "~650KV outrunner, 2212/2216 class"  # TEMP: low KV so full throttle physically can't pass the cap (docs/DESIGN.md)
+esc = "AM32 or Bluejay 35A, bidirectional DShot"  # TEMP
+
+[projectile]
+mass_g = 0.86               # TEMP: published average 0.86 g; weigh 20 of yours and divide by 20
+diameter_mm = 13.4          # TEMP: published 13.4 +-0.2 mm; check with calipers
+thickness_mm = 6.9          # TEMP: published 6.93 +-0.18 mm; check with calipers
+drag_coefficient = 0.7      # TEMP: on the edge-on area (CdA ~51 mm2); step 7 calibration replaces the model
+
+[link]
+port = "sim"                # TEMP: "sim", "COM5", "/dev/ttyACM0" or "socket://localhost:7777"
+setpoint_hz = 50            # SETPOINT doubles as the heartbeat
+timeout_ms = 200            # silence longer than this = link lost (both ends)
+
+[controls]
+fire_input = "assistive switch in a 3.5 mm jack on the ESP32"   # TEMP
+arm_input = "toggle switch on the turret box"                    # TEMP
+
+[power]
+battery = "4S Li-ion 21700 pack with BMS, 14.4 V, 4 Ah"  # TEMP
+battery_full_v = 16.8       # TEMP: 4S Li-ion fully charged
+
+[host]
+computer = "Windows PC for development"   # TEMP: Jetson Orin Nano recommended for the chair

@@ -1,0 +1,10 @@
+# Host side. Python 3.10-3.12 (3.12 on the dev PC; JetPack 6 has 3.10).
+numpy
+opencv-python
+pyrealsense2          # Intel RealSense SDK (wheels: Windows 3.10-3.14, Linux aarch64 3.9/3.10/3.12)
+ultralytics           # YOLO pose + ByteTrack. AGPL-3.0, see docs/FLAGS.md #19
+lapx                  # ByteTrack's assignment solver (Ultralytics installs it on first use otherwise)
+pyserial
+tomli; python_version < "3.11"
+pytest
+# torch comes with ultralytics; on a CUDA PC install the CUDA build from pytorch.org first.

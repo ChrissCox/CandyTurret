@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+host/models/
+host/captures/
+*.bag
+.venv/
