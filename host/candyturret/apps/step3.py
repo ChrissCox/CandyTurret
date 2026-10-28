@@ -18,7 +18,7 @@ from .. import draw as D
 from .. import protocol as P
 from ..link import TurretLink
 from ..sim_esp32 import SimESP32, SimPort, limits_from_cfg
-from . import DOWN, LEFT, RIGHT, UP, save_capture, window_closed
+from . import DOWN, LEFT, RIGHT, UP, keycode, save_capture, window_closed
 
 TITLE = "CandyTurret step 3: manual pan/tilt (q quits)"
 SWITCH_NAMES = [(P.SW_ARM, "ARM"), (P.SW_POWER_OK, "POWER"), (P.SW_TRIGGER, "TRIGGER"),
@@ -100,14 +100,13 @@ def run(cfg, args):
                 dial(img, (520, 250), 90, tm.tilt_cdeg / 100, t.tilt_min_deg, t.tilt_max_deg, tilt, "tilt", vertical=True)
             for i, s in enumerate(log):
                 D.text(img, s[:110], (16, 380 + 14 * i), D.GRAY, 0.38, 1, bg=False)
-            keys = "a/d pan  w/s tilt  (caps = 5 deg)  c center  x freeze host  q quit"
+            keys = "a/d pan  w/s tilt  (caps = 5 deg)  c center  x freeze host  o screenshot  q quit"
             if sim:
                 keys += "   sim: m arm switch, p trigger"
             D.text(img, keys, (16, 452), D.CYAN, 0.42, 1, bg=False)
             cv2.imshow(TITLE, img)
 
-            key = cv2.waitKeyEx(15)
-            ch = key & 0xFF if key != -1 and key < 0x10000 else None
+            key, ch = keycode(cv2.waitKeyEx(15))
             if key == -1:
                 pass
             elif ch in (ord("q"), 27) or window_closed(TITLE):

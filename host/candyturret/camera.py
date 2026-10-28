@@ -69,7 +69,11 @@ class RealSenseCamera:
 
     def read(self) -> Frame | None:
         """None when no frame came within 200 ms. After ~5 s of nothing, restarts the pipeline."""
-        ok, frames = self.pipeline.try_wait_for_frames(200)
+        try:
+            ok, frames = self.pipeline.try_wait_for_frames(200)
+        except RuntimeError:                 # pipeline not running: the last restart failed
+            ok = False
+            time.sleep(0.2)
         if not ok:
             self._misses += 1
             if self._misses >= 25:
@@ -104,7 +108,10 @@ class RealSenseCamera:
             print("D435 restart failed:", e)
 
     def close(self):
-        self.pipeline.stop()
+        try:
+            self.pipeline.stop()
+        except RuntimeError:                 # already stopped by a failed restart
+            pass
 
 
 class VideoCamera:

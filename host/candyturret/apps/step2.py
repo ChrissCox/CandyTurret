@@ -59,6 +59,8 @@ def run(cfg, args):
             for tr in tracks:
                 if tr.last_seen != frame.t:
                     continue
+                if tr.aim.person.conf < cfg.detector.conf and not tr.opted_in:
+                    continue                                 # kept for tracking only, not worth drawing
                 a, p = tr.aim, tr.aim.person
                 is_target = target is not None and tr.id == target.id
                 color = D.YELLOW if is_target else (D.GREEN if tr.opted_in else D.GRAY)
@@ -79,8 +81,8 @@ def run(cfg, args):
                     D.poly(img, shrink(a.quad, cfg.aim.torso_shrink), D.CYAN)
                 if a.aim_px is not None and lost == 0:
                     D.crosshair(img, a.aim_px, D.GREEN if a.fire_ok else D.RED)
-                    if a.range_m:
-                        r = int(cfg.aim.head_clearance_m * frame.intr.fx / a.range_m)
+                    if a.depth_z:
+                        r = int(cfg.aim.head_clearance_m * frame.intr.fx / a.depth_z)
                         cv2.circle(img, D.ipt(a.aim_px), r, D.RED, 1, cv2.LINE_AA)   # no-head zone
                 if target.kf is not None:
                     v = target.kf.velocity
@@ -95,7 +97,8 @@ def run(cfg, args):
                 elif a.fire_ok:
                     D.banner(img, f"WOULD FIRE at #{target.id}  ({a.range_m:.2f} m)", D.GREEN)
                 else:
-                    D.banner(img, "HOLD: " + ", ".join(a.holds), D.RED)
+                    more = f" +{len(a.holds) - 2}" if len(a.holds) > 2 else ""
+                    D.banner(img, "HOLD: " + ", ".join(a.holds[:2]) + more, D.RED)
             elif any(tr.last_seen == frame.t for tr in tracks):
                 D.banner(img, "Raise both hands for 1 s to join", D.WHITE)
 

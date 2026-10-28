@@ -216,7 +216,9 @@ class TurretLink:
             self._last_t_ms = pkt.t_ms
             if pkt.ack_seq != self._last_ack:
                 self._last_ack = pkt.ack_seq
-                self.latency_s = now - self._sent_at[pkt.ack_seq]
+                sent = self._sent_at[pkt.ack_seq]
+                if sent and now - sent < 1.0:           # otherwise it acks a frame from before we connected
+                    self.latency_s = now - sent
             self.telemetry, self.telemetry_at = pkt, now
         elif pkt.type == Msg.INFO:
             if self.info is not None and pkt.boot_id != self.info.boot_id:

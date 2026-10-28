@@ -191,7 +191,8 @@ class TargetSelector:
 
     def cycle(self, tracks: list[Track], t: float) -> Track | None:
         """Lock the next eligible person to the right (wraps around)."""
-        cands = sorted((tr for tr in tracks if self.eligible(tr, t) and tr.aim.aim_px is not None),
+        cands = sorted((tr for tr in tracks
+                        if self.eligible(tr, t) and tr.last_seen == t and tr.aim.aim_px is not None),
                        key=lambda tr: tr.aim.aim_px[0])
         if not cands:
             return None

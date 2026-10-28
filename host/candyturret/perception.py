@@ -151,6 +151,7 @@ def analyze(p: Person, frame: Frame, cfg, others=()) -> Aim:
         h.append("no depth")
     elif z is None or out.valid_frac < a.min_valid_depth_fraction:
         h.append("depth unreliable")
+        out.point_cam = None
     elif not cam.min_depth_m <= z <= cam.max_depth_m:
         h.append(f"outside camera range ({z:.1f} m)")
         out.range_m = out.point_cam = None

@@ -70,7 +70,7 @@ class Fault(IntEnum):
     NONE = 0
     LINK_TIMEOUT = 1
     OVERSPEED = 2
-    FEED = 3                       # feeder jam, or two shots in a row with no RPM dip
+    FEED = 3                       # feeder jam, or a shot with no RPM dip
     LIMIT_HIT = 4                  # a limit switch closed that the setpoint should never reach
     RPM_SENSOR = 5                 # throttle up but no RPM reading
     ARM_ON_AT_BOOT = 6
